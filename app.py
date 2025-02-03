@@ -70,5 +70,9 @@ def delete_item(id):
     db.session.commit()
     return jsonify({'message': 'Item deleted'})
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({'status': 'OK'}), 200
+
 if __name__ == '__main__':
-    app.run(port=8080)
+    app.run(port=8082)
