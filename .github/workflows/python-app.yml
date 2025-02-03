@@ -53,6 +53,17 @@ jobs:
         run: |
           git config --global user.name "vyshakprojects"
           git config --global user.email "vyshakm117@gmail.com"
+          git checkout main
+
+          SHA=${{ github.sha }}
+          echo "Updating Helm chart deployment.yaml with image tag ${SHA}"
+
+          # Update the image in deployment.yaml with the new SHA
+          sed -i "s|vyshakprojects/demo-image-test:.*|vyshakprojects/demo-image-test:${SHA}|" deployment/deployment.yaml
+
+          # Optionally, print out the updated file to verify the change
+          cat deployment/deployment.yaml
+
           git add deployment/deployment.yaml
           git commit -m "Update image tag in Helm chart to ${SHA}"
-          git push
+          git push origin main
