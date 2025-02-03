@@ -5,11 +5,10 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: read
+  contents: write  # Ensure GitHub Actions has write access to the repository contents
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,8 +17,8 @@ jobs:
       - name: login to docker hub
         id: docker-hub
         env:
-          username: ${{secrets.DOCKERHUB_USERNAME}}
-          password: ${{secrets.DOCKERHUB_PASSWORD}}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
         run: |
           docker login -u $username -p $password 
 
@@ -28,14 +27,15 @@ jobs:
         id: build-docker-image
         run: |
           ls -la 
-          docker build . -f Dockerfile -t ${{secrets.DOCKERHUB_USERNAME}}/demo-image-test:${{ github.sha }}
+          docker build . -f Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/demo-image-test:${{ github.sha }}
 
       # Push the Docker image
       - name: push the docker image
         id: push-docker-image
         run: |
-          docker push ${{secrets.DOCKERHUB_USERNAME}}/demo-image-test:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/demo-image-test:${{ github.sha }}
 
+      # Checkout feature-branch
       - name: Checkout feature-branch
         uses: actions/checkout@v2
         with:
@@ -53,13 +53,19 @@ jobs:
           # Optionally, print out the updated file to verify the change
           cat deployment/deployment.yaml
         
-      # (Optional) Commit and push changes to deployment.yaml if you want
+      # Commit and push changes to deployment.yaml using a personal access token (PAT)
       - name: Commit and push changes to deployment.yaml
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Reference the secret with your PAT
         run: |
-          # Optionally, print out the updated file to verify the change
           git config --global user.name "vyshakprojects"
           git config --global user.email "vyshakm117@gmail.com"
+          
+          # Set up the git remote URL to use the token for authentication
+          git remote set-url origin https://github.com/${{ github.repository }}.git
 
           git add deployment/deployment.yaml
           git commit -m "Update image tag in Helm chart to ${SHA}"
-          git push origin main
+          
+          # Push using the personal access token
+          git push https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
