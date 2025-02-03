@@ -36,6 +36,13 @@ jobs:
         run: |
           docker push ${{secrets.DOCKERHUB_USERNAME}}/demo-image-test:${{ github.sha }}
 
+      # (Optional) Commit and push changes to deployment.yaml if you want
+      - name: Commit and push changes to deployment.yaml
+        run: |
+          git config --global user.name "vyshakprojects"
+          git config --global user.email "vyshakm117@gmail.com"
+          git checkout main
+
       # Update the Helm chart with the new commit SHA
       - name: Update Helm deployment.yaml with new SHA
         run: |
@@ -47,20 +54,10 @@ jobs:
 
           # Optionally, print out the updated file to verify the change
           cat deployment/deployment.yaml
-
+        
       # (Optional) Commit and push changes to deployment.yaml if you want
       - name: Commit and push changes to deployment.yaml
         run: |
-          git config --global user.name "vyshakprojects"
-          git config --global user.email "vyshakm117@gmail.com"
-          git checkout main
-
-          SHA=${{ github.sha }}
-          echo "Updating Helm chart deployment.yaml with image tag ${SHA}"
-
-          # Update the image in deployment.yaml with the new SHA
-          sed -i "s|vyshakprojects/demo-image-test:.*|vyshakprojects/demo-image-test:${SHA}|" deployment/deployment.yaml
-
           # Optionally, print out the updated file to verify the change
           cat deployment/deployment.yaml
 
