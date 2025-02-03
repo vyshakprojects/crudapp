@@ -51,7 +51,7 @@ jobs:
         id: build-docker-image
         run: |
           ls -la 
-          docker build . -f Dockerfile -t ${{secrets.DOCKERHUB_USERNAME}}/demo-image-test:${{ github.head_ref }}.${{ github.sha }}
+          docker build . -f Dockerfile -t ${{secrets.DOCKERHUB_USERNAME}}/demo-image-test:${{ github.sha }}
       - name: push the docker image
         id: push-docker-image
-        run: docker push ${{secrets.DOCKERHUB_USERNAME}}/demo-image-test:${{ github.head_ref }}.${{ github.sha }}
+        run: docker push ${{secrets.DOCKERHUB_USERNAME}}/demo-image-test:${{ github.sha }}
