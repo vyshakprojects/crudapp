@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app-deployment
+  labels:
+    app: python-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: python-app
+  template:
+    metadata:
+      labels:
+        app: python-app
+    spec:
+      containers:
+      - name: python-app
+        image: vyshakprojects/demo-image-test:673be53a343852624a6e4e756b76cdf01239af2a
+        ports:
+        - containerPort: 8000  # Update with the port your app listens on
+        env:
+        - name: ENV_VAR_NAME  # Add any environment variables if needed
+          value: "your_value"
