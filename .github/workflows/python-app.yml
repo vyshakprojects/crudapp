@@ -36,12 +36,16 @@ jobs:
         run: |
           docker push ${{secrets.DOCKERHUB_USERNAME}}/demo-image-test:${{ github.sha }}
 
+      - name: Checkout feature-branch
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
       # (Optional) Commit and push changes to deployment.yaml if you want
       - name: Commit and push changes to deployment.yaml
         run: |
           git config --global user.name "vyshakprojects"
           git config --global user.email "vyshakm117@gmail.com"
-          git checkout main
 
       # Update the Helm chart with the new commit SHA
       - name: Update Helm deployment.yaml with new SHA
