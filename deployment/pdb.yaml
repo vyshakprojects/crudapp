@@ -1,0 +1,11 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: python-app-pdb
+  labels:
+    app: python-app
+spec:
+  minAvailable: 2    # Ensure at least 2 pods are available during voluntary disruptions
+  selector:
+    matchLabels:
+      app: python-app
