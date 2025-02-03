@@ -40,13 +40,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: main
-
-      # (Optional) Commit and push changes to deployment.yaml if you want
-      - name: Commit and push changes to deployment.yaml
-        run: |
-          git config --global user.name "vyshakprojects"
-          git config --global user.email "vyshakm117@gmail.com"
-
+          
       # Update the Helm chart with the new commit SHA
       - name: Update Helm deployment.yaml with new SHA
         run: |
@@ -63,7 +57,8 @@ jobs:
       - name: Commit and push changes to deployment.yaml
         run: |
           # Optionally, print out the updated file to verify the change
-          cat deployment/deployment.yaml
+          git config --global user.name "vyshakprojects"
+          git config --global user.email "vyshakm117@gmail.com"
 
           git add deployment/deployment.yaml
           git commit -m "Update image tag in Helm chart to ${SHA}"
