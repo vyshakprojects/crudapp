@@ -76,7 +76,7 @@ def health_check():
 
 @app.route('/version', methods=['GET'])
 def version():
-    return jsonify({'Version': '1.0.0'}), 200
+    return jsonify({'Version': '2.0.0'}), 200
 
 if __name__ == '__main__':
     app.run(port=8080, host='0.0.0.0')
