@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: python-app
-        image: vyshakprojects/demo-image-test:1953cb772028d483da6bea1856f6d008278b43e7
+        image: vyshakprojects/demo-image-test:0ead1e04384ab48b48315d7272c9cdec250ffa4e
         ports:
         - containerPort: 8000  # Update with the port your app listens on
         env:
