@@ -18,7 +18,25 @@ spec:
       - name: python-app
         image: vyshakprojects/demo-image-test:a634b2c7d1e713d82e730b49401d7dce562c98ed
         ports:
-        - containerPort: 8000  # Update with the port your app listens on
+        - containerPort: 8080  # Update with the port your app listens on
         env:
         - name: ENV_VAR_NAME  # Add any environment variables if needed
           value: "your_value"
+        
+        # Readiness Probe
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080  # The port your app listens on
+          initialDelaySeconds: 5  # Time to wait before starting the check after container starts
+          periodSeconds: 10  # How often to check (in seconds)
+          failureThreshold: 3  # Number of consecutive failures before marking the pod as "not ready"
+
+        # Liveness Probe
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080  # The port your app listens on
+          initialDelaySeconds: 15  # Time to wait before starting the check after container starts
+          periodSeconds: 20  # How often to check (in seconds)
+          failureThreshold: 3  # Number of consecutive failures before restarting the pod
